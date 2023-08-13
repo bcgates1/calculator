@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class DisplayController extends ChangeNotifier {
   String displayText = '0';
-  num a = 0, b = 0;
   String resultDisplay = '', result = '';
   List<String> operations = [], digits = [];
 
@@ -11,8 +10,8 @@ class DisplayController extends ChangeNotifier {
     switch (buttonText) {
       case 'AC':
         displayText = '0';
-        a = 0;
-        b = 0;
+        operations = [];
+        digits = [];
         resultDisplay = '';
         result = '';
 
@@ -44,7 +43,8 @@ class DisplayController extends ChangeNotifier {
             displayText = '0';
             resultDisplay = '';
           }
-          operations = displayText.trim().split(RegExp(r'\d+(\.\d+)?'));
+          //to seperate operators from numbers
+          operations = displayText.trim().split(RegExp(r'\d+(\.)?'));
           // Remove any empty strings
           operations.removeWhere((part) => part.isEmpty);
 

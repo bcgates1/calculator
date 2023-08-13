@@ -31,7 +31,7 @@ class Homepage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: SizedBox(
-                  height: 400,
+                  height: MediaQuery.sizeOf(context).height * 0.5,
                   child: Align(
                     alignment: Alignment.bottomRight,
                     child: Consumer<DisplayController>(
