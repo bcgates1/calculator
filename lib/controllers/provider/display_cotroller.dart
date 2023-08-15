@@ -43,12 +43,10 @@ class DisplayController extends ChangeNotifier {
             displayText = '0';
             resultDisplay = '';
           }
-          //to seperate operators from numbers
-          operations = displayText.trim().split(RegExp(r'\d+(\.)?'));
-          // Remove any empty strings
-          operations.removeWhere((part) => part.isEmpty);
+          _operationsAdd();
+          _digitsAdd();
 
-          _resultCheck2();
+          _resultCheck2(operationsList: operations);
         }
         break;
       case '1':
@@ -81,6 +79,15 @@ class DisplayController extends ChangeNotifier {
       case '0':
         displayText += buttonText;
         break;
+      case '00':
+        if (operations.isNotEmpty) {
+          if (displayText[displayText.length - 1] != operations.last) {
+            displayText += buttonText;
+          }
+        } else if (resultDisplay.isNotEmpty) {
+          displayText += buttonText;
+        }
+
       case '.':
         if (operations.isNotEmpty && displayText[displayText.length - 1] == operations.last) {
           displayText += '0$buttonText';
@@ -90,23 +97,14 @@ class DisplayController extends ChangeNotifier {
         break;
 
       case '=':
-        _resultCheck2();
+        _resultCheck2(operationsList: operations);
         break;
       default:
         log('default');
         break;
     }
-    //to seperate operators from numbers
-    operations = displayText.trim().split(RegExp(r'\d+(\.)?'));
-
-    //to Remove any empty strings
-    operations.removeWhere((part) => part.isEmpty || part == '.');
-    log(operations.toString());
-
-    //to seperate numbers from operators
-    digits = displayText.split(RegExp(r'(\+|\-|\×|\÷|\%)'));
-    // Remove any empty strings
-    digits.removeWhere((part) => part.isEmpty);
+    _operationsAdd();
+    _digitsAdd();
 
     //to remove leading zero
     if (displayText.length == 2 &&
@@ -117,7 +115,7 @@ class DisplayController extends ChangeNotifier {
     }
     //to find the result
     if (operations.isNotEmpty && displayText[displayText.length - 1] != operations.last) {
-      _resultCheck2();
+      _resultCheck2(operationsList: operations);
     }
     //To show zero and operator in the display like 0+ 0-
     if (operations.isEmpty && displayText != '0') resultDisplay = displayText;
@@ -132,32 +130,79 @@ class DisplayController extends ChangeNotifier {
     }
   }
 
-  _resultCheck2() {
-    if (operations.isNotEmpty) {
+  _operationsAdd() {
+    //to seperate operators from numbers
+    operations = displayText.trim().split(RegExp(r'\d+(\.)?'));
+
+    //to Remove any empty strings
+    operations.removeWhere((part) => part.isEmpty || part == '.');
+  }
+
+  _digitsAdd() {
+    //to seperate numbers from operators
+    digits = displayText.split(RegExp(r'(\+|\-|\×|\÷|\%)'));
+    // Remove any empty strings
+    digits.removeWhere((part) => part.isEmpty);
+  }
+
+  _resultCheck2({required List operationsList}) {
+    //to have seperate OPlist from main OPlist bcz deleting from list cause main list to be changed so .toList used
+    //and operation become empty when only division and multiplication comes so that satisfies condition for resultDisplay = displayText
+    // to avoid that this is used
+    List operationsList = operations.toList();
+
+    if (operationsList.isNotEmpty) {
       // Convert the strings to numbers
       List<num> numsList = digits.map((part) => num.parse(part)).toList();
 
-      if (displayText[displayText.length - 1] == operations[operations.length - 1]) {
-        operations.removeLast();
+      //to remove operator if it is the last element in case of backspace calling result
+      if (displayText[displayText.length - 1] == operationsList[operationsList.length - 1]) {
+        operationsList.removeLast();
       }
 
       // Calculate the result using the list of numbers and operations
       num result = numsList[0];
-      for (int i = 0; i < operations.length; i++) {
-        if (operations[i] == '+') {
-          result += numsList[i + 1];
-        } else if (operations[i] == '-') {
-          result -= numsList[i + 1];
-        } else if (operations[i] == '×') {
-          result *= numsList[i + 1];
-        } else if (operations[i] == '÷') {
+      bool check = false;
+      int temp = 0;
+      //if division or multiplication is there then we can't take numList[0]
+      //so result value will be added in if(check)
+      if (operationsList.contains('×') || operationsList.contains('÷')) {
+        result = 0;
+      }
+      for (int i = 0; i < operationsList.length; i++) {
+        if (operationsList.contains('÷')) {
+          temp = i;
+          i = operationsList.indexOf('÷');
+          check = true;
+
           if (numsList[i + 1] != 0) {
-            result /= numsList[i + 1];
+            numsList[i] /= numsList[i + 1];
+
+            numsList.removeAt(i + 1);
           } else {
             result = double.infinity; // division by zero
           }
-        } else if (operations[i] == '%') {
+        } else if (!check && operationsList.contains('×')) {
+          temp = i;
+          i = operationsList.indexOf('×');
+          check = true;
+
+          numsList[i] *= numsList[i + 1];
+          numsList.removeAt(i + 1);
+        }
+
+        if (operationsList[i] == '+') {
+          result += numsList[i + 1];
+        } else if (operationsList[i] == '-') {
+          result -= numsList[i + 1];
+        } else if (operationsList[i] == '%') {
           result = (result / 100) * numsList[i + 1];
+        }
+        if (check) {
+          operationsList.removeAt(i);
+          i = temp - 1;
+          check = false;
+          result = numsList[0];
         }
       }
 
@@ -170,7 +215,9 @@ class DisplayController extends ChangeNotifier {
         }
       } else {
         if (result.toString().length > 10) {
-          resultDisplay = result.toStringAsFixed(4);
+          resultDisplay = result.toStringAsFixed(6);
+        } else if (result.truncate() == result) {
+          resultDisplay = result.round().toString();
         } else {
           resultDisplay = result.toString();
         }
