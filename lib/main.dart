@@ -1,9 +1,15 @@
 import 'package:calculator/controllers/provider/display_cotroller.dart';
 import 'package:calculator/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main(List<String> args) {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(const Myapp());
 }
 
