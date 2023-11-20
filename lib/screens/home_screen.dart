@@ -19,11 +19,6 @@ class Homepage extends StatelessWidget {
               end: Alignment.bottomRight,
               colors: [
                 Color.fromARGB(255, 33, 150, 243),
-                // Color.fromARGB(255, 156, 39, 176),
-                // Color.fromARGB(255, 0, 150, 136),
-                // Color.fromARGB(255, 76, 175, 80),
-                // Color.fromARGB(255, 255, 87, 34),
-                // Color.fromARGB(255, 233, 30, 99),
                 Color.fromARGB(255, 3, 169, 244),
                 Color.fromARGB(255, 206, 147, 216)
               ],
@@ -63,109 +58,54 @@ class Homepage extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MyButton(
-                    buttonText: 'AC',
-                    onPressed: () => displayController.buttonPress(buttonText: 'AC'),
-                  ),
-                  MyButton(
-                    buttonText: '00',
-                    onPressed: () => displayController.buttonPress(buttonText: '00'),
-                  ),
-                  MyButton(
-                    buttonText: '%',
-                    onPressed: () => displayController.buttonPress(buttonText: '%'),
-                  ),
-                  MyButton(
-                    buttonText: '÷',
-                    onPressed: () => displayController.buttonPress(buttonText: '÷'),
-                    orange: true,
-                  ),
-                ],
+                children: ['AC', '00', '%', '÷']
+                    .map(
+                      (e) => MyButton(
+                        buttonText: e,
+                        onPressed: () => displayController.buttonPress(buttonText: e),
+                      ),
+                    )
+                    .toList(),
               ),
               Row(
-                children: [
-                  MyButton(
-                    buttonText: '7',
-                    onPressed: () => displayController.buttonPress(buttonText: '7'),
-                  ),
-                  MyButton(
-                    buttonText: '8',
-                    onPressed: () => displayController.buttonPress(buttonText: '8'),
-                  ),
-                  MyButton(
-                    buttonText: '9',
-                    onPressed: () => displayController.buttonPress(buttonText: '9'),
-                  ),
-                  MyButton(
-                    buttonText: '×',
-                    onPressed: () => displayController.buttonPress(buttonText: '×'),
-                    orange: true,
-                  )
-                ],
+                children: ['7', '8', '9', '×']
+                    .map(
+                      (e) => MyButton(
+                        buttonText: e,
+                        onPressed: () => displayController.buttonPress(buttonText: e),
+                      ),
+                    )
+                    .toList(),
               ),
               Row(
-                children: [
-                  MyButton(
-                    buttonText: '4',
-                    onPressed: () => displayController.buttonPress(buttonText: '4'),
-                  ),
-                  MyButton(
-                    buttonText: '5',
-                    onPressed: () => displayController.buttonPress(buttonText: '5'),
-                  ),
-                  MyButton(
-                    buttonText: '6',
-                    onPressed: () => displayController.buttonPress(buttonText: '6'),
-                  ),
-                  MyButton(
-                    buttonText: '-',
-                    onPressed: () => displayController.buttonPress(buttonText: '-'),
-                    orange: true,
-                  )
-                ],
+                children: ['4', '5', '6', '-']
+                    .map(
+                      (e) => MyButton(
+                        buttonText: e,
+                        onPressed: () => displayController.buttonPress(buttonText: e),
+                      ),
+                    )
+                    .toList(),
               ),
               Row(
-                children: [
-                  MyButton(
-                    buttonText: '1',
-                    onPressed: () => displayController.buttonPress(buttonText: '1'),
-                  ),
-                  MyButton(
-                    buttonText: '2',
-                    onPressed: () => displayController.buttonPress(buttonText: '2'),
-                  ),
-                  MyButton(
-                    buttonText: '3',
-                    onPressed: () => displayController.buttonPress(buttonText: '3'),
-                  ),
-                  MyButton(
-                    buttonText: '+',
-                    onPressed: () => displayController.buttonPress(buttonText: '+'),
-                    orange: true,
-                  )
-                ],
+                children: ['1', '2', '3', '+']
+                    .map(
+                      (e) => MyButton(
+                        buttonText: e,
+                        onPressed: () => displayController.buttonPress(buttonText: e),
+                      ),
+                    )
+                    .toList(),
               ),
               Row(
-                children: [
-                  MyButton(
-                    buttonText: '⌫',
-                    onPressed: () => displayController.buttonPress(buttonText: '←'),
-                  ),
-                  MyButton(
-                    buttonText: '0',
-                    onPressed: () => displayController.buttonPress(buttonText: '0'),
-                  ),
-                  MyButton(
-                    buttonText: '.',
-                    onPressed: () => displayController.buttonPress(buttonText: '.'),
-                  ),
-                  MyButton(
-                    buttonText: '=',
-                    onPressed: () => displayController.buttonPress(buttonText: '='),
-                    orange: true,
-                  ),
-                ],
+                children: ['⌫', '0', '.', '=']
+                    .map(
+                      (e) => MyButton(
+                        buttonText: e,
+                        onPressed: () => displayController.buttonPress(buttonText: e),
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ),

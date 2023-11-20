@@ -7,11 +7,10 @@ class MyButton extends StatelessWidget {
     super.key,
     required this.buttonText,
     required this.onPressed,
-    this.orange = false,
   });
   final String buttonText;
   final Function onPressed;
-  final bool orange;
+  static const List buttonList = ['÷', '×', '-', '+', '='];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,7 @@ class MyButton extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.blue,
-                  backgroundColor: orange ? Colors.orange : Colors.white,
+                  backgroundColor: buttonList.contains(buttonText) ? Colors.orange : Colors.white,
                   // minimumSize: Size(value.clicked ? 50 : 60, value.clicked ? 50 : 60),
                   elevation: 20,
                   shape: const CircleBorder(),
